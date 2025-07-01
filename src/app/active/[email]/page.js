@@ -57,7 +57,9 @@ const ActivarUsuario = () => {
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${encodeURIComponent(email)}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${email}`
+      );
       
       if (response.ok) {
         const data = await response.json();
@@ -91,7 +93,7 @@ const ActivarUsuario = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${encodeURIComponent(email)}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${email}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
