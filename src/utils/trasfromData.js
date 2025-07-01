@@ -12,7 +12,7 @@ export const formatDateToSpanish = (dateString) => {
   const year = date.getFullYear();
   
   return `${day} de ${month} de ${year}`;
-};
+}; 
 
 export const transformDataPerson = (data) => {
   return data.map((item) => ({
