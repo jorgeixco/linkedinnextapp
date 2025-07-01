@@ -13,11 +13,9 @@ const CreateUser = ({ userProfile }) => {
   const [error, setError] = useState(null);
   const [currentUserProfile, setCurrentUserProfile] = useState(userProfile);
 
-  // Pre-rellenar datos cuando se recibe el perfil de LinkedIn o desde localStorage
   useEffect(() => {
     let profileData = userProfile;
     
-    // Si no se recibió userProfile como prop, intentar cargar desde localStorage
     if (!profileData) {
       try {
         const savedUserProfile = localStorage.getItem('userProfile');
@@ -56,19 +54,24 @@ const CreateUser = ({ userProfile }) => {
       setLoader(true);
       setError(null);
       
-      const response = await fetch('/api/persona', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: colaboradorData.email,
-          full_name: colaboradorData.full_name,
-          url_image: currentUserProfile?.picture || "", // Usar la imagen de LinkedIn si está disponible
-          team: colaboradorData.team,
-          role: colaboradorData.role
-        })
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/persona`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: colaboradorData.email,
+            full_name: colaboradorData.full_name,
+            url_image: currentUserProfile?.picture || "",
+            team: colaboradorData.team,
+            role: colaboradorData.role,
+            is_enabled: false,
+            is_admin: false,
+          }),
+        }
+      );
       
       if (!response.ok) {
         throw new Error('Error al crear el colaborador');
@@ -76,12 +79,11 @@ const CreateUser = ({ userProfile }) => {
       
       const result = await response.json();
       
-      // Actualizar localStorage para indicar que el usuario ya existe en la DB
       if (currentUserProfile) {
         const updatedProfile = {
           ...currentUserProfile,
           existsInDB: true,
-          dbData: result.result // Guardar los datos completos de la DB
+          dbData: result.result
         };
         localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
         console.log('Perfil actualizado en localStorage:', updatedProfile);
@@ -89,7 +91,6 @@ const CreateUser = ({ userProfile }) => {
       
       setSuccess(true);
       
-      // Redirigir a la página principal después de 2 segundos
       setTimeout(() => {
         window.location.href = '/';
       }, 2000);
@@ -104,20 +105,20 @@ const CreateUser = ({ userProfile }) => {
 
   if (success) {
     return (
-      <div className="bg-white text-[#0f2f4f]" style={{ fontFamily: "Inter, sans-serif" }}>
+      <div
+        className="bg-white text-[#0f2f4f]"
+        style={{ fontFamily: "Inter, sans-serif" }}
+      >
         <section className="px-4 sm:px-6 md:px-10 py-4 panel-blue-royal flex justify-center items-center">
           <h1 className="text-xl font-semibold">¡Bienvenido a IXCOMERCIO!</h1>
         </section>
         <main className="w-full flex flex-col items-center justify-center min-h-[75vh]">
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-green-600 mb-4">
-              ¡Colaborador creado exitosamente!
+            <h2 className="text-2xl font-semibold text-[#0f6ba8] mb-4">
+              Registro exitoso
             </h2>
-            <p className="text-lg text-gray-600 mb-4">
-              Bienvenido {colaboradorData.full_name}
-            </p>
-            <p className="text-sm text-gray-500">
-              Serás redirigido a la página principal en unos segundos...
+            <p className="text-lg text-gray-500 mb-4">
+              Se envió un correo al administrador para aprobar su acceso.
             </p>
           </div>
         </main>
@@ -127,14 +128,12 @@ const CreateUser = ({ userProfile }) => {
 
   return (
     <div className="bg-white text-[#0f2f4f]" style={{ fontFamily: "Inter, sans-serif" }}>
-      {/* Banner */}
       <section className="px-4 sm:px-6 md:px-10 py-4 panel-blue-royal flex justify-center items-center">
         <h1 className="text-xl font-semibold">
           {currentUserProfile ? 'Completar Registro' : 'Panel de Creación de Colaborador'}
         </h1>
       </section>
 
-      {/* Main */}
       <main className="w-full flex flex-col items-center justify-center min-h-[75vh]">
         <div className="w-full max-w-md">
           <h2 className="text-center text-[#0f6ba8] text-2xl font-normal mb-4">
@@ -161,7 +160,7 @@ const CreateUser = ({ userProfile }) => {
               value={colaboradorData.email}
               onChange={handleColaboradorChange}
               className={`w-full input ${currentUserProfile ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={currentUserProfile !== null} // Solo deshabilitado si viene de LinkedIn
+              disabled={currentUserProfile !== null}
               required
             />
             <input
@@ -171,7 +170,7 @@ const CreateUser = ({ userProfile }) => {
               value={colaboradorData.full_name}
               onChange={handleColaboradorChange}
               className={`w-full input ${currentUserProfile ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={currentUserProfile !== null} // Solo deshabilitado si viene de LinkedIn
+              disabled={currentUserProfile !== null}
               required
             />
             <input

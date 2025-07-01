@@ -73,8 +73,7 @@ export const useFetch = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/reconocimiento/${id}`
       );
-      const data = await response.json();
-      // Para un certificado individual, no necesitamos transformar a array
+      const data = await response.json(); 
       const certificateData = {
         id: data.result.id,
         name: data.result.full_name,
@@ -101,13 +100,11 @@ export const useFetch = () => {
           email
         )}`
       );
-
+      
       if (response.ok) {
         const userData = await response.json();
-        console.log("Usuario encontrado en la DB:", userData);
         setUserExists(true);
 
-        // Actualizar localStorage para marcar que el usuario existe
         const savedProfile = localStorage.getItem("userProfile");
         if (savedProfile) {
           try {
@@ -116,11 +113,10 @@ export const useFetch = () => {
               ...profile,
               existsInDB: true,
               dbData: userData.result,
+              is_admin: userData.result.is_admin,
+              is_enabled: userData.result.is_enabled,
             };
             localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
-            console.log(
-              "Perfil actualizado en localStorage con confirmación de existencia"
-            );
           } catch (err) {
             console.error("Error al actualizar localStorage:", err);
           }
@@ -128,7 +124,6 @@ export const useFetch = () => {
 
         return true;
       } else if (response.status === 404) {
-        console.log("Usuario no encontrado en la DB");
         setUserExists(false);
         return false;
       } else {

@@ -1,29 +1,25 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../public/assets/ixcomercio.png";
 import "./Navbar.css";
 
 export const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [userExists, setUserExists] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
-  // useEffect para verificar localStorage solo en el cliente
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userProfile = localStorage.getItem("userProfile");
-      if (userProfile) {
-        try {
-          const parsedProfile = JSON.parse(userProfile);
-          setUserExists(!!parsedProfile);
-        } catch (error) {
-          console.error("Error parsing user profile:", error);
-          setUserExists(false);
-        }
+    try {
+      const savedUserProfile = localStorage.getItem("userProfile");
+      if (savedUserProfile) {
+        setUserProfile(JSON.parse(savedUserProfile));
       }
+    } catch (error) {
+      console.error("Error al cargar perfil desde localStorage:", error);
     }
   }, []);
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,20 +36,26 @@ export const Navbar = () => {
           <Link href="/" className="navbar-link">
             Inicio
           </Link>
-
-          <Link href="/certificacion" className="navbar-link">
-            Crear certificación
-          </Link>
-          <Link href="/colaborador" className="navbar-link">
-            Asignar a un colaborador
-          </Link>
+          
+          {userProfile?.is_admin && (
+            <Link href="/certificacion" className="navbar-link">
+              Crear certificación
+            </Link>
+          )}
+          {userProfile?.is_admin && (
+            <Link href="/colaborador" className="navbar-link">
+              Asignar a un colaborador
+            </Link>
+          )}
 
           <Link href="/my-certificate" className="navbar-link">
             Mis certificados
           </Link>
-          <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
-            <span>Admin</span>
-          </div>
+          {userProfile?.is_admin && (
+            <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
+              <span>Admin</span>
+            </div>
+          )}
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>
