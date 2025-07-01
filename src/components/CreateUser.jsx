@@ -75,7 +75,6 @@ const CreateUser = ({ userProfile }) => {
       }
       
       const result = await response.json();
-      console.log('Colaborador creado:', result);
       
       // Actualizar localStorage para indicar que el usuario ya existe en la DB
       if (currentUserProfile) {
