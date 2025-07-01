@@ -41,23 +41,19 @@ export const Navbar = () => {
             Inicio
           </Link>
 
-          {userExists && (
-            <>
-              <Link href="/certificacion" className="navbar-link">
-                Crear certificación
-              </Link>
-              <Link href="/colaborador" className="navbar-link">
-                Asignar a un colaborador
-              </Link>
+          <Link href="/certificacion" className="navbar-link">
+            Crear certificación
+          </Link>
+          <Link href="/colaborador" className="navbar-link">
+            Asignar a un colaborador
+          </Link>
 
-              <Link href="/my-certificate" className="navbar-link">
-                Mis certificados
-              </Link>
-              <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
-                <span>Admin</span>
-              </div>
-            </>
-          )}
+          <Link href="/my-certificate" className="navbar-link">
+            Mis certificados
+          </Link>
+          <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
+            <span>Admin</span>
+          </div>
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>

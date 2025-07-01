@@ -6,62 +6,26 @@ export const useSocialMedia = () => {
   const [isPDFGenerating, setIsPDFGenerating] = useState(false);
 
   const handleLinkedInShare = async (certificate) => {
-    try {
-      setIsLinkedInLoading(true);
+    const currentDate = new Date();
 
-      // Guardamos el certificado en localStorage para poder usarlo después del OAuth
-      localStorage.setItem("pendingLinkedInShare", JSON.stringify(certificate));
+    const linkedinUsername = "me";
 
-      // Generamos una URL de autorización OAuth de LinkedIn
-      const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
-      const redirectUri = encodeURIComponent(
-        process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI
-      );
-      const scope = encodeURIComponent("profile openid email w_member_social");
-      const state = Math.random().toString(36).substring(7); // Para seguridad
+    const linkedinCertUrl = new URL(
+      `https://www.linkedin.com/in/${linkedinUsername}/edit/forms/certification/new/`
+    );
 
-      // Guardamos el state para verificarlo después
-      localStorage.setItem("linkedinOAuthState", state);
+    linkedinCertUrl.searchParams.append("certId", certificate.id);
+    linkedinCertUrl.searchParams.append(
+      "certUrl",
+      `${window.location.origin}/certificate/${certificate.id}`
+    );
+    linkedinCertUrl.searchParams.append("isFromA2p", "true");
+    linkedinCertUrl.searchParams.append("issueMonth", currentDate.getMonth().toString());
+    linkedinCertUrl.searchParams.append("issueYear", currentDate.getFullYear().toString());
+    linkedinCertUrl.searchParams.append("name", certificate.name);
+    linkedinCertUrl.searchParams.append("organizationName", "IXComercio");
 
-      const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
-
-      // Abrimos ventana de autorización
-      const authWindow = window.open(
-        authUrl,
-        "LinkedInAuth",
-        "width=600,height=600,scrollbars=yes,resizable=yes"
-      );
-
-      // Escuchamos el mensaje del callback
-      const handleMessage = async (event) => {
-        if (event.origin !== window.location.origin) return;
-
-        if (event.data.type === "LINKEDIN_AUTH_SUCCESS") {
-          const { code } = event.data;
-          await processLinkedInShare(code, certificate);
-          authWindow?.close();
-          window.removeEventListener("message", handleMessage);
-        } else if (event.data.type === "LINKEDIN_AUTH_ERROR") {
-          console.error("Error en autenticación LinkedIn:", event.data.error);
-          authWindow?.close();
-          window.removeEventListener("message", handleMessage);
-        }
-      };
-
-      window.addEventListener("message", handleMessage);
-
-      // Cleanup si la ventana se cierra manualmente
-      const checkClosed = setInterval(() => {
-        if (authWindow?.closed) {
-          clearInterval(checkClosed);
-          window.removeEventListener("message", handleMessage);
-          setIsLinkedInLoading(false);
-        }
-      }, 1000);
-    } catch (error) {
-      console.error("Error al iniciar compartir en LinkedIn:", error);
-      setIsLinkedInLoading(false);
-    }
+    window.open(linkedinCertUrl.toString(), "_blank");
   };
 
   const processLinkedInShare = async (code, certificate) => {
@@ -84,14 +48,12 @@ export const useSocialMedia = () => {
       const data = await response.json();
 
       if (data.linkedinCertUrl) {
-        // Abrir la URL de LinkedIn para añadir el certificado
         window.open(data.linkedinCertUrl, "_blank");
       }
     } catch (error) {
       console.error("Error al procesar publicación en LinkedIn:", error);
     } finally {
       setIsLinkedInLoading(false);
-      // Limpiar datos temporales
       localStorage.removeItem("pendingLinkedInShare");
       localStorage.removeItem("linkedinOAuthState");
     }
@@ -111,10 +73,8 @@ export const useSocialMedia = () => {
     try {
       setIsPDFGenerating(true);
 
-      // Verificar si necesitamos información adicional del certificado
       let fullCertificateData = certificate;
 
-      // Si no tenemos toda la información necesaria, la obtenemos del API
       if (!certificate.team || !certificate.role) {
         try {
           const response = await fetch(
@@ -128,11 +88,9 @@ export const useSocialMedia = () => {
           };
         } catch (error) {
           console.error("Error fetching full certificate data:", error);
-          // Continuar con los datos actuales
         }
       }
 
-      // Importar dinámicamente las librerías para evitar problemas de SSR
       const html2canvas = (await import("html2canvas")).default;
       const jsPDF = (await import("jspdf")).default;
 
