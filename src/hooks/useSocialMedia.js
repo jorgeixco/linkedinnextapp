@@ -22,7 +22,7 @@ export const useSocialMedia = () => {
     linkedinCertUrl.searchParams.append("isFromA2p", "true");
     linkedinCertUrl.searchParams.append("issueMonth", currentDate.getMonth().toString());
     linkedinCertUrl.searchParams.append("issueYear", currentDate.getFullYear().toString());
-    linkedinCertUrl.searchParams.append("name", certificate.name);
+    linkedinCertUrl.searchParams.append("name", certificate.type);
     linkedinCertUrl.searchParams.append("organizationName", "IXComercio");
 
     window.open(linkedinCertUrl.toString(), "_blank");
