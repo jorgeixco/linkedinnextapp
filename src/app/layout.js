@@ -15,8 +15,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "LinkedIn App Next",
-  description: "Migrated LinkedIn App to Next.js",
+  title: "Certificaciones IXComercio",
+  description: "Plataforma para gestión y emisión de certificados profesionales de IXComercio. Valida tu formación y comparte tus logros profesionales.",
+  keywords: ["certificaciones", "IXComercio", "formación profesional", "certificados", "validación", "LinkedIn"],
+  authors: [{ name: "IXComercio" }],
+  creator: "IXComercio",
+  publisher: "IXComercio",
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "100x100", type: "image/png" },
+    ],
+  },
+  viewport: "width=device-width, initial-scale=1",
+  robots: "index, follow",
 };
 
 export default function RootLayout({ children }) {

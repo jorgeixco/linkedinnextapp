@@ -13,7 +13,7 @@ export const useFetch = () => {
   const [dataCertTypes, setDataCertTypes] = useState([]);
   const [dataReconocimientos, setDataReconocimientos] = useState([]);
   const [certificateData, setCertificateData] = useState(null);
-
+  const [userExists, setUserExists] = useState(null);
   const [loader, setLoader] = useState(false);
   const [loaderCertTypes, setLoaderCertTypes] = useState(false);
   const [loaderReconocimientos, setLoaderReconocimientos] = useState(false);
@@ -83,7 +83,7 @@ export const useFetch = () => {
         date: formatDateToSpanish(data.result.created_at),
         cert_type_tipo: data.result.cert_type_tipo,
         team: data.result.team,
-        role: data.result.role
+        role: data.result.role,
       };
       setCertificateData(certificateData);
       return certificateData;
@@ -92,6 +92,52 @@ export const useFetch = () => {
       throw error;
     } finally {
       setLoaderCertificate(false);
+    }
+  };
+  const checkUserExists = async (email) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${encodeURIComponent(
+          email
+        )}`
+      );
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("Usuario encontrado en la DB:", userData);
+        setUserExists(true);
+
+        // Actualizar localStorage para marcar que el usuario existe
+        const savedProfile = localStorage.getItem("userProfile");
+        if (savedProfile) {
+          try {
+            const profile = JSON.parse(savedProfile);
+            const updatedProfile = {
+              ...profile,
+              existsInDB: true,
+              dbData: userData.result,
+            };
+            localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
+            console.log(
+              "Perfil actualizado en localStorage con confirmación de existencia"
+            );
+          } catch (err) {
+            console.error("Error al actualizar localStorage:", err);
+          }
+        }
+
+        return true;
+      } else if (response.status === 404) {
+        console.log("Usuario no encontrado en la DB");
+        setUserExists(false);
+        return false;
+      } else {
+        throw new Error("Error al verificar usuario");
+      }
+    } catch (error) {
+      console.error("Error al verificar si el usuario existe:", error);
+      setError("Error al verificar el usuario en la base de datos");
+      return false;
     }
   };
 
@@ -128,5 +174,8 @@ export const useFetch = () => {
     fetchDataReconocimientos,
     fetchCertificateById,
     resetState,
+    checkUserExists,
+    userExists,
+    setUserExists,
   };
 };
