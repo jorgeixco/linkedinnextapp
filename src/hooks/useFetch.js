@@ -124,7 +124,7 @@ export const useFetch = () => {
       } else if (response.status === 404) {
         setUserExists(false);
         return false;
-      } else {
+      } else { 
         throw new Error("Error al verificar usuario");
       }
     } catch (error) {
