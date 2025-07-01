@@ -10,63 +10,57 @@ export async function GET(request) {
   // Si hay error OAuth
   if (error) {
     console.error('OAuth error:', error);
-    return new NextResponse(`
-      <html>
-        <body>
-          <script>
-            window.opener?.postMessage({
-              type: 'LINKEDIN_AUTH_ERROR',
-              error: '${error}'
-            }, window.location.origin);
-            window.close();
-          </script>
-        </body>
-      </html>
-    `, {
-      headers: { 'Content-Type': 'text/html' },
-    });
+    return NextResponse.redirect(new URL(`/?error=${error}`, request.url));
   }
 
   if (!code) {
     console.error('No code received');
-    return new NextResponse(`
-      <html>
-        <body>
-          <script>
-            window.opener?.postMessage({
-              type: 'LINKEDIN_AUTH_ERROR',
-              error: 'no_code'
-            }, window.location.origin);
-            window.close();
-          </script>
-        </body>
-      </html>
-    `, {
-      headers: { 'Content-Type': 'text/html' },
-    });
+    return NextResponse.redirect(new URL('/?error=no_code', request.url));
   }
 
   try {
     // Verificar state para seguridad (opcional, pero recomendado)
     console.log('OAuth callback exitoso, procesando code...');
 
-    // Enviar el código de vuelta al popup opener
-    return new NextResponse(`
-      <html>
-        <body>
-          <script>
-            window.opener?.postMessage({
-              type: 'LINKEDIN_AUTH_SUCCESS',
-              code: '${code}',
-              state: '${state || ''}'
-            }, window.location.origin);
-            window.close();
-          </script>
-        </body>
-      </html>
-    `, {
-      headers: { 'Content-Type': 'text/html' },
+    // Intercambiar el código por un token de acceso
+    const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
+    const clientSecret = process.env.LINKEDIN_CLIENT_SECRET;
+    const redirectUri = process.env.NEXT_PUBLIC_LINKEDIN_REDIRECT_URI;
+
+    // Obtener token de acceso
+    const tokenResponse = await axios.post('https://www.linkedin.com/oauth/v2/accessToken', 
+      new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: redirectUri,
+        client_id: clientId,
+        client_secret: clientSecret,
+      }).toString(),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
+
+    const accessToken = tokenResponse.data.access_token;
+
+    // Obtener información del perfil del usuario
+    const profileResponse = await axios.get('https://api.linkedin.com/v2/userinfo', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
     });
+
+    const userProfile = profileResponse.data;
+    console.log('Perfil de usuario obtenido:', userProfile);
+
+    // Redirigir al home con los datos del usuario
+    const homeUrl = new URL('/', request.url);
+    homeUrl.searchParams.set('success', 'true');
+    homeUrl.searchParams.set('user', encodeURIComponent(JSON.stringify(userProfile)));
+    
+    return NextResponse.redirect(homeUrl);
 
   } catch (error) {
     console.error('❌ Error en OAuth callback:', {
@@ -76,20 +70,6 @@ export async function GET(request) {
       data: error.response?.data,
     });
 
-    return new NextResponse(`
-      <html>
-        <body>
-          <script>
-            window.opener?.postMessage({
-              type: 'LINKEDIN_AUTH_ERROR',
-              error: 'auth_failed'
-            }, window.location.origin);
-            window.close();
-          </script>
-        </body>
-      </html>
-    `, {
-      headers: { 'Content-Type': 'text/html' },
-    });
+    return NextResponse.redirect(new URL('/?error=auth_failed', request.url));
   }
 } 

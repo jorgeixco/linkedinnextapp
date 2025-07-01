@@ -15,6 +15,7 @@ export const SocialButtons = ({ certificate }) => {
     handleDownload,
     handleCopyLink,
     isLinkedInLoading,
+    isPDFGenerating,
   } = useSocialMedia();
   
   return (
@@ -54,10 +55,19 @@ export const SocialButtons = ({ certificate }) => {
 
         <button
           onClick={() => handleDownload(certificate)}
-          className="flex items-center justify-center w-8 h-8 bg-[#052948] text-white rounded hover:bg-[#070a0c] transition-colors"
-          title="Descargar certificado"
+          disabled={isPDFGenerating}
+          className={`flex items-center justify-center w-8 h-8 text-white rounded transition-colors ${
+            isPDFGenerating 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-[#052948] hover:bg-[#070a0c]'
+          }`}
+          title={isPDFGenerating ? "Generando PDF..." : "Descargar certificado"}
         >
-          <DownloadIcon size={16} />
+          {isPDFGenerating ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <DownloadIcon size={16} />
+          )}
         </button>
 
         <button
