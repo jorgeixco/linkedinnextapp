@@ -14,7 +14,9 @@ export const SocialButtons = ({ certificate }) => {
     handleTwitterShare,
     handleDownload,
     handleCopyLink,
+    isLinkedInLoading,
   } = useSocialMedia();
+  
   return (
     <div className="w-full" style={{ marginTop: "10px" }}>
       <div className="flex flex-row items-end justify-between gap-2">
@@ -24,10 +26,19 @@ export const SocialButtons = ({ certificate }) => {
           <div className="flex flex-row gap-2">
             <button
               onClick={() => handleLinkedInShare(certificate)}
-              className="flex items-center justify-center w-8 h-8 bg-[#052948] text-white rounded hover:bg-[#070a0c] transition-colors"
-              title="Compartir en LinkedIn"
+              disabled={isLinkedInLoading}
+              className={`flex items-center justify-center w-8 h-8 text-white rounded transition-colors ${
+                isLinkedInLoading 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-[#052948] hover:bg-[#070a0c]'
+              }`}
+              title={isLinkedInLoading ? "Procesando..." : "Compartir en LinkedIn"}
             >
-              <LinkedInIcon size={16} />
+              {isLinkedInLoading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <LinkedInIcon size={16} />
+              )}
             </button>
 
             <button

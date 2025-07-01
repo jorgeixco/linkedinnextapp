@@ -11,14 +11,13 @@ export const ButtonLogin = () => {
     )}` +
     `&scope=openid%20profile%20email%20w_member_social` +
     `&state=1234`;
+
     return (
-      <button
-        onClick={() => (window.location.href = authorizeUrl)}
-        type="button"
+      <a
+        href={authorizeUrl}
         className="button"
-        // onClick={handleLinkedInLogin}
       >
         Login en LinkedIn
-      </button>
+      </a>
     );
 };
