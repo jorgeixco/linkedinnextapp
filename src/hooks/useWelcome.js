@@ -13,7 +13,7 @@ export const useWelcome = () => {
     const success = urlParams.get("success");
     const errorParam = urlParams.get("error");
     const userParam = urlParams.get("user");
-
+ 
     if (success === "true" && userParam) {
       try {
         const userData = JSON.parse(decodeURIComponent(userParam));
