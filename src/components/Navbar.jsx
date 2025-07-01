@@ -47,10 +47,11 @@ export const Navbar = () => {
               Asignar a un colaborador
             </Link>
           )}
-
-          <Link href="/my-certificate" className="navbar-link">
-            Mis certificados
-          </Link>
+          {userProfile?.email && (
+            <Link href="/my-certificate" className="navbar-link">
+              Mis certificados
+            </Link>
+          )}
           {userProfile?.is_admin && (
             <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
               <span>Admin</span>
