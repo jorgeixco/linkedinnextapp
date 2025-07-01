@@ -96,9 +96,7 @@ export const useFetch = () => {
   const checkUserExists = async (email) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${encodeURIComponent(
-          email
-        )}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/persona/${email}`
       );
       
       if (response.ok) {
