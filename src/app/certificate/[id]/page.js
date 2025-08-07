@@ -1,12 +1,12 @@
 'use client'
-import React, { useEffect } from "react";
-import { useParams } from "next/navigation";
+import React, { useEffect } from "react"; 
 import { useFetch } from "../../../hooks/useFetch";
 import { PreviewCertificate } from "../../../components/PreviewCertificate";
 import { Footer } from "../../../components/Footer";
 import Image from 'next/image';
 import logo from "../../../../public/assets/ixcomercio.png";
 import "../../../index.css";
+import { useParams } from "next/navigation";
 
 const PublicCertificate = () => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const PublicCertificate = () => {
       fetchCertificateById(id);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, []);
 
   if (loaderCertificate) {
     return (
@@ -72,7 +72,7 @@ const PublicCertificate = () => {
       {/* Logo Header */}
       <header className="px-4 sm:px-6 md:px-10 py-4 panel-blue-royal">
         <div className="flex justify-center">
-          <Image src={logo} alt="IX Comercio" className="h-10" />
+          <Image src={logo} alt="IX Comercio" className="h-11" />
         </div>
       </header>
 
@@ -135,18 +135,18 @@ const PublicCertificate = () => {
                     {certificateData.type}
                   </p>
                 </div>
-                <div>
+                {/* <div>
                   <p className="text-sm text-gray-600">Equipo:</p>
                   <p className="font-medium text-[#0f2f4f]">
                     {certificateData.team}
                   </p>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-sm text-gray-600">Rol:</p>
                   <p className="font-medium text-[#0f2f4f]">
                     {certificateData.role}
                   </p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-sm text-gray-600">Fecha de obtención:</p>
                   <p className="font-medium text-[#0f2f4f]">

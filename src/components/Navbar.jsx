@@ -20,7 +20,6 @@ export const Navbar = () => {
     }
   }, []);
 
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -36,26 +35,21 @@ export const Navbar = () => {
           <Link href="/" className="navbar-link">
             Inicio
           </Link>
-          
-          {userProfile?.is_admin && (
-            <Link href="/certificacion" className="navbar-link">
-              Crear certificación
-            </Link>
-          )}
-          {userProfile?.is_admin && (
-            <Link href="/colaborador" className="navbar-link">
-              Asignar a un colaborador
-            </Link>
-          )}
 
-          <Link href="/my-certificate" className="navbar-link">
-            Mis certificados
+          <Link href="/allcertificacion" className="navbar-link">
+            Crear certificación
           </Link>
-          {userProfile?.is_admin && (
-            <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
-              <span>Admin</span>
-            </div>
-          )}
+
+          <Link href="/colaborador" className="navbar-link">
+            Asignar a un colaborador
+          </Link>
+
+          <Link href="/certificates" className="navbar-link">
+            Certificados
+          </Link>
+          <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">
+            <span>Admin</span>
+          </div>
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>

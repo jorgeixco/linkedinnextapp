@@ -11,7 +11,6 @@ const CreateUser = ({ userProfile }) => {
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-  const [currentUserProfile, setCurrentUserProfile] = useState(userProfile);
 
   useEffect(() => {
     let profileData = userProfile;
@@ -28,7 +27,6 @@ const CreateUser = ({ userProfile }) => {
       }
     }
     
-    setCurrentUserProfile(profileData);
     
     if (profileData) {
       setColaboradorData({
@@ -48,60 +46,9 @@ const CreateUser = ({ userProfile }) => {
     }));
   };
 
-  const handleCreateColaborador = async (e) => {
-    e.preventDefault();
-    try {
-      setLoader(true);
-      setError(null);
-      
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/persona`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: colaboradorData.email,
-            full_name: colaboradorData.full_name,
-            url_image: currentUserProfile?.picture || "",
-            team: colaboradorData.team,
-            role: colaboradorData.role,
-            is_enabled: false,
-            is_admin: false,
-          }),
-        }
-      );
-      
-      if (!response.ok) {
-        throw new Error('Error al crear el colaborador');
-      }
-      
-      const result = await response.json();
-      
-      if (currentUserProfile) {
-        const updatedProfile = {
-          ...currentUserProfile,
-          existsInDB: true,
-          dbData: result.result
-        };
-        localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
-        console.log('Perfil actualizado en localStorage:', updatedProfile);
-      }
-      
-      setSuccess(true);
-      
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 2000);
-      
-    } catch (error) {
-      console.error('Error al crear colaborador:', error);
-      setError('Error al crear el colaborador. Por favor, intenta de nuevo.');
-    } finally {
-      setLoader(false);
-    }
-  };
+
+  
+
 
   if (success) {
     return (
@@ -130,20 +77,17 @@ const CreateUser = ({ userProfile }) => {
     <div className="bg-white text-[#0f2f4f]" style={{ fontFamily: "Inter, sans-serif" }}>
       <section className="px-4 sm:px-6 md:px-10 py-4 panel-blue-royal flex justify-center items-center">
         <h1 className="text-xl font-semibold">
-          {currentUserProfile ? 'Completar Registro' : 'Panel de Creación de Colaborador'}
+          Panel de Creación de Colaborador
         </h1>
       </section>
 
       <main className="w-full flex flex-col items-center justify-center min-h-[75vh]">
         <div className="w-full max-w-md">
           <h2 className="text-center text-[#0f6ba8] text-2xl font-normal mb-4">
-            {currentUserProfile ? `¡Hola ${currentUserProfile.name || 'Usuario'}!` : 'Crear colaborador'}
+            Crear colaborador
           </h2>
-          <p className="text-center text-gray-600 mb-8">
-            {currentUserProfile 
-              ? 'Para completar tu registro, necesitamos algunos datos adicionales'
-              : 'Completa la información del nuevo colaborador'
-            }
+          <p className="text-center text-gray-600 mb-8"> 
+            Completa la información del nuevo colaborador
           </p>
           
           {error && (
@@ -151,61 +95,6 @@ const CreateUser = ({ userProfile }) => {
               {error}
             </div>
           )}
-          
-          <form className="space-y-4" onSubmit={handleCreateColaborador}>
-            <input
-              id="email"
-              type="email"
-              placeholder="Email del colaborador"
-              value={colaboradorData.email}
-              onChange={handleColaboradorChange}
-              className={`w-full input ${currentUserProfile ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={currentUserProfile !== null}
-              required
-            />
-            <input
-              id="full_name"
-              type="text"
-              placeholder="Nombre completo"
-              value={colaboradorData.full_name}
-              onChange={handleColaboradorChange}
-              className={`w-full input ${currentUserProfile ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={currentUserProfile !== null}
-              required
-            />
-            <input
-              id="team"
-              type="text"
-              placeholder="Equipo (ej: Desarrollo, Marketing, RRHH)"
-              value={colaboradorData.team}
-              onChange={handleColaboradorChange}
-              className="w-full input"
-              disabled={loader}
-              required
-            />
-            <input
-              id="role"
-              type="text"
-              placeholder="Rol/Posición (ej: Desarrollador, Diseñador, Team Lead)"
-              value={colaboradorData.role}
-              onChange={handleColaboradorChange}
-              className="w-full input"
-              disabled={loader}
-              required
-            />
-            <button
-              type="submit"
-              className="w-full button"
-              disabled={loader}
-            >
-              {loader 
-                ? 'Creando colaborador...' 
-                : currentUserProfile 
-                  ? 'Completar registro →' 
-                  : 'Crear colaborador →'
-              }
-            </button>
-          </form>
         </div>
       </main>
     </div>

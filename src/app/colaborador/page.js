@@ -35,19 +35,29 @@ const AsignarColaborador = () => {
           Asignación de certificado
         </h2>
 
-        <form className="space-y-4 w-full max-w-md" onSubmit={handleCreateAssignment}>
-          <Dropdown
-            data={dataPerson}
-            value={assignmentData.email_persona}
-            onChange={(value) => setAssignmentData((prev) => ({ ...prev, email_persona: value }))}
-            placeholder={
-              loader ? "Cargando colaboradores..." : "Seleccione un colaborador"
+        <form
+          className="space-y-4 w-full max-w-md"
+          onSubmit={handleCreateAssignment}
+        >
+          <input
+            id="nombre del colaborador"
+            type="text"
+            placeholder="Nombre del colaborador"
+            value={assignmentData.nombre_colaborador}
+            onChange={(e) =>
+              setAssignmentData((prev) => ({
+                ...prev,
+                nombre_colaborador: e.target.value,
+              }))
             }
+            className="w-full input"
           />
           <Dropdown
             data={dataCertTypes}
             value={assignmentData.cert_type_id}
-            onChange={(value) => setAssignmentData((prev) => ({ ...prev, cert_type_id: value }))}
+            onChange={(value) =>
+              setAssignmentData((prev) => ({ ...prev, cert_type_id: value }))
+            }
             placeholder={
               loaderCertTypes
                 ? "Cargando tipos de certificado..."

@@ -48,7 +48,7 @@ const MyCertificate = () => {
       <div>
         <section className="px-4 sm:px-6 md:px-10 py-4 panel-blue-royal flex justify-center items-center">
           <h1 className="text-xl font-semibold">
-            Panel de mis certificados
+            Panel de Certificados
           </h1>
         </section>
         <div className="flex justify-center items-center min-h-[80vh]">
@@ -75,9 +75,7 @@ const MyCertificate = () => {
     <div>
       <section className="px-4 sm:px-6 md:px-10 py-4 panel-blue-royal flex justify-center items-center">
         <h1 className="text-xl font-semibold">
-          {userProfile
-            ? `Mis certificados - ${userProfile.name || "Usuario"}`
-            : "Panel de mis certificados"}
+          Certificados
         </h1>
       </section>
       <div

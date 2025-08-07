@@ -188,8 +188,8 @@ const ActivarUsuario = () => {
               <h3 className="font-semibold text-lg mb-2">Información del usuario:</h3>
               <p><strong>Email:</strong> {userData.email}</p>
               <p><strong>Nombre:</strong> {userData.full_name}</p>
-              <p><strong>Equipo:</strong> {userData.team}</p>
-              <p><strong>Rol:</strong> {userData.role}</p>
+              {/* <p><strong>Equipo:</strong> {userData.team}</p> */}
+              {/* <p><strong>Rol:</strong> {userData.role}</p> */}
             </div>
           )}
           

@@ -8,7 +8,7 @@ export const useFrom = () => {
   });
 
   const [assignmentData, setAssignmentData] = useState({
-    email_persona: "",
+    nombre_colaborador: "",
     cert_type_id: ""
   });
 
@@ -73,18 +73,16 @@ export const useFrom = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email_persona: assignmentData.email_persona,
+            nombre_colaborador: assignmentData.nombre_colaborador,
             cert_type_id: parseInt(assignmentData.cert_type_id),
-            meeting: ""
           })
         }
       );
       
       setAssignmentData({
-        email_persona: "",
+        nombre_colaborador: "",
         cert_type_id: ""
       });
-      console.log({response})
       return response.json();
     } catch (error) {
       console.error('Error al crear asignación:', error);
@@ -113,22 +111,15 @@ export const useFrom = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            email: colaboradorData.email,
-            full_name: colaboradorData.full_name,
-            url_image: "", // Dejamos vacío como solicitado
-            team: colaboradorData.team,
-            role: colaboradorData.role
-          })
+          body: JSON.stringify(
+            {
+              cert_type_id: parseInt(assignmentData.cert_type_id),
+              nombre_colaborador: assignmentData.nombre_colaborador,
+            }
+          )
         }
       );
       
-      setColaboradorData({
-        email: "",
-        full_name: "",
-        team: "",
-        role: ""
-      });
       return response.json();
     } catch (error) {
       console.error('Error al crear colaborador:', error);

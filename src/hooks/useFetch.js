@@ -55,7 +55,7 @@ export const useFetch = () => {
     try {
       setLoaderReconocimientos(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/reconocimiento/email/${email}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/reconocimiento/`
       );
       const data = await response.json();
       setDataReconocimientos(transformDataReconocimientos(data.result));
