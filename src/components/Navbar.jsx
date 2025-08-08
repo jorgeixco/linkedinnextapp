@@ -36,7 +36,7 @@ export const Navbar = () => {
             Inicio
           </Link>
 
-          <Link href="/allcertificacion" className="navbar-link">
+          <Link href="/createceritification" className="navbar-link">
             Crear certificación
           </Link>
 
@@ -44,7 +44,7 @@ export const Navbar = () => {
             Asignar a un colaborador
           </Link>
 
-          <Link href="/certificates" className="navbar-link">
+          <Link href="/allcertificates" className="navbar-link">
             Certificados
           </Link>
           <div className="flex items-center space-x-2 border border-[#0f2f4f] rounded-full text-xs text-[#0f2f4f] w-[50px] h-[30px] text-center justify-center">

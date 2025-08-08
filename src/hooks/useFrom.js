@@ -66,7 +66,7 @@ export const useFrom = () => {
     try {
       setLoader(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/reconocimiento`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}reconocimiento`,
         {
           method: 'POST',
           headers: {

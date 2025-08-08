@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from "react"; 
+import React, { useEffect, useState  } from "react"; 
 import { useFetch } from "../../../hooks/useFetch";
 import { PreviewCertificate } from "../../../components/PreviewCertificate";
 import { Footer } from "../../../components/Footer";
@@ -7,18 +7,26 @@ import Image from 'next/image';
 import logo from "../../../../public/assets/ixcomercio.png";
 import "../../../index.css";
 import { useParams } from "next/navigation";
+import { formatDateToSpanish, transformDataReconocimientos } from "@/utils/trasfromData";
+import { LinkedInIcon } from "@/components/SocialIcons";
+import { useSocialMedia } from "@/hooks/useSocialMedia";
 
 const PublicCertificate = () => {
   const { id } = useParams();
   const { certificateData, loaderCertificate, fetchCertificateById } = useFetch();
-
+  const { handleLinkedInShare } = useSocialMedia();
+  const [dataToLinkedIn, setDataToLinkedIn] = useState(null);
   useEffect(() => {
     if (id) {
       fetchCertificateById(id);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+useEffect(() => {
+  if(certificateData){
+    setDataToLinkedIn(transformDataReconocimientos(certificateData));
+  }
+}, [certificateData]);
   if (loaderCertificate) {
     return (
       <div className="min-h-screen bg-white flex flex-col">
@@ -79,7 +87,7 @@ const PublicCertificate = () => {
       {/* Certificate Content */}
       <main className="flex-1 flex items-center justify-center py-8">
         <div className="max-w-4xl w-full px-4 flex flex-col items-center justify-center">
-          <div className="text-center mb-8" style={{margin: "10px"}}>
+          <div className="text-center mb-8" style={{ margin: "10px" }}>
             <h1 className="text-3xl font-bold text-[#0f2f4f] mb-2">
               Certificado de Reconocimiento
             </h1>
@@ -124,7 +132,7 @@ const PublicCertificate = () => {
                 <div>
                   <p className="text-sm text-gray-600">Colaborador:</p>
                   <p className="font-medium text-[#0f2f4f]">
-                    {certificateData.name}
+                    {certificateData.nombre_colaborador}
                   </p>
                 </div>
                 <div>
@@ -132,33 +140,32 @@ const PublicCertificate = () => {
                     Tipo de Reconocimiento:
                   </p>
                   <p className="font-medium text-[#0f2f4f]">
-                    {certificateData.type}
+                    {certificateData.cert_type_nombre}
                   </p>
                 </div>
-                {/* <div>
-                  <p className="text-sm text-gray-600">Equipo:</p>
-                  <p className="font-medium text-[#0f2f4f]">
-                    {certificateData.team}
-                  </p>
-                </div> */}
-                {/* <div>
-                  <p className="text-sm text-gray-600">Rol:</p>
-                  <p className="font-medium text-[#0f2f4f]">
-                    {certificateData.role}
-                  </p>
-                </div> */}
                 <div>
                   <p className="text-sm text-gray-600">Fecha de obtención:</p>
                   <p className="font-medium text-[#0f2f4f]">
-                    {certificateData.date}
+                    {formatDateToSpanish(certificateData.created_at)}
                   </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Fecha de obtención:</p>
+                  <button
+                    onClick={() => handleLinkedInShare(dataToLinkedIn)}
+                    className={`flex items-center justify-center w-8 h-8 text-white rounded transition-colors bg-[#052948] hover:bg-[#070a0c]`}
+                    title={
+                        "Compartir en LinkedIn"
+                    }
+                  >
+                    <LinkedInIcon size={16} />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </main>
-
     </div>
   );
 };

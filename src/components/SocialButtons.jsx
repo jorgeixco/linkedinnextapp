@@ -7,6 +7,7 @@ import {
   DownloadIcon,
   CopyLinkIcon,
 } from "./SocialIcons";
+import { formatDateToSpanish } from "@/utils/trasfromData";
 
 export const SocialButtons = ({ certificate }) => {
   const {
@@ -23,10 +24,10 @@ export const SocialButtons = ({ certificate }) => {
       <div className="flex flex-col items-start justify-between gap-2">
         <div className="flex flex-col gap-2">
           <p className="text-sm text-[#303131] font-[600] text-[12px] ">
-            Nombre del colaborador: {certificate.name}
+            Nombre del colaborador: {certificate.nombre_colaborador}
           </p>
           <p className="text-sm text-[#303131] font-[600] text-[12px] ">
-            Fecha de emisión: {certificate.date}
+            Fecha de emisión: {formatDateToSpanish(certificate.created_at)}
           </p>
 
           {/* <div className="flex flex-row gap-2">

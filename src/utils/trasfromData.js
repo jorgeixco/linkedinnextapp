@@ -33,12 +33,10 @@ export const transformDataCertType = (data) => {
 };
 
 export const transformDataReconocimientos = (data) => {
-  return data.map((item) => ({
-    id: item.id,
-    name: item.full_name,
-    type: item.cert_type_nombre,
-    meeting: item.meeting,
-    date: formatDateToSpanish(item.created_at),
-    cert_type_tipo: item.cert_type_tipo
-  }));
+  return {
+    id: data.id,
+    name: data.nombre_colaborador,
+    type: data.cert_type_nombre,
+    date: data.created_at,
+  };
 };

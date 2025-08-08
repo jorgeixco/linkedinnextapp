@@ -6,20 +6,16 @@ import { useFrom } from "../../hooks/useFrom";
 
 const AsignarColaborador = () => {
   const {
-    dataPerson,
     dataCertTypes,
     loader,
     loaderCertTypes,
-    fetchDataPerson,
     fetchDataCertTypes,
   } = useFetch();
 
   const { handleCreateAssignment, setAssignmentData, assignmentData } = useFrom();
 
   useEffect(() => {
-    fetchDataPerson();
     fetchDataCertTypes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
