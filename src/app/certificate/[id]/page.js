@@ -151,7 +151,7 @@ console.log({ certificateData });
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Fecha de obtención:</p>
+                  <p className="text-sm text-gray-600">Publicar en LinkedIn:</p>
                   <button
                     onClick={() => handleLinkedInShare(dataToLinkedIn)}
                     className={`flex items-center justify-center w-8 h-8 text-white rounded transition-colors bg-[#052948] hover:bg-[#070a0c]`}
