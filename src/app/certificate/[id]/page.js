@@ -27,6 +27,7 @@ useEffect(() => {
     setDataToLinkedIn(transformDataReconocimientos(certificateData));
   }
 }, [certificateData]);
+console.log({ certificateData });
   if (loaderCertificate) {
     return (
       <div className="min-h-screen bg-white flex flex-col">
@@ -106,10 +107,10 @@ useEffect(() => {
               heightLogo="40%"
               classBackground="background-image-black"
               isPreview={false}
-              name={certificateData.name}
-              type={certificateData.type}
+              nombre_colaborador={certificateData.nombre_colaborador}
+              cert_type_nombre={certificateData.cert_type_nombre}
               id={certificateData.id}
-              date={certificateData.date}
+              date={certificateData.created_at}
               rounded
             />
           </div>
@@ -154,9 +155,7 @@ useEffect(() => {
                   <button
                     onClick={() => handleLinkedInShare(dataToLinkedIn)}
                     className={`flex items-center justify-center w-8 h-8 text-white rounded transition-colors bg-[#052948] hover:bg-[#070a0c]`}
-                    title={
-                        "Compartir en LinkedIn"
-                    }
+                    title={"Compartir en LinkedIn"}
                   >
                     <LinkedInIcon size={16} />
                   </button>

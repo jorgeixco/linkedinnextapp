@@ -16,7 +16,6 @@ const MyCertificate = () => {
   useEffect(() => {
     fetchDataReconocimientos();
   }, []);
-
   if (error) {
     return (
       <div>
@@ -87,11 +86,10 @@ const MyCertificate = () => {
                   heightLogo="50%"
                   classBackground="background-image-black"
                   isPreview
-                  name={certificate.name}
-                  type={certificate.type}
+                  nombre_colaborador={certificate.nombre_colaborador}
+                  cert_type_nombre={certificate.cert_type_nombre}
                   id={certificate.id}
-                  number={certificate.number}
-                  date={certificate.date}
+                  date={certificate.created_at}
                 />
                 <SocialButtons certificate={certificate} />
               </div>

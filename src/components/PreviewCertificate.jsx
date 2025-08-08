@@ -3,6 +3,7 @@ import React from "react";
 import Image from 'next/image';
 import logo from "../../public/assets/ixcomerciofooter.png";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { formatDateToSpanish } from "@/utils/trasfromData";
 
 export const PreviewCertificate = ({
   width,
@@ -14,8 +15,8 @@ export const PreviewCertificate = ({
   heightLogo,
   classBackground,
   isPreview,
-  name,
-  type,
+  nombre_colaborador,
+  cert_type_nombre,
   id,
   date,
   rounded,
@@ -46,7 +47,7 @@ export const PreviewCertificate = ({
           className={`text-white font-bold text-center`}
           style={{ fontSize: fontSizeTitle }}
         >
-          {name}
+          {nombre_colaborador}
         </h1>
         <p
           className={`text-white text-center`}
@@ -58,7 +59,7 @@ export const PreviewCertificate = ({
           className={`text-white text-center`}
           style={{ fontSize: fontSizeTitle }}
         >
-          {type}
+          {cert_type_nombre}
         </h2>
         {!isPreview && (
           <>
@@ -72,7 +73,7 @@ export const PreviewCertificate = ({
               className={`text-white text-center`}
               style={{ fontSize: fontSizeParagraph }}
             >
-              {date}
+              {formatDateToSpanish(date)}
             </p>
           </>
         )}
